@@ -1,5 +1,12 @@
 {
   "headless": true,
   "runs": 100,
-  "urls": []
+  "urls": [
+    "https://www.axios.com/trump-coronavirus-response-criticism-adcb77db-a7ff-44b9-a0e0-52f5c4885e23.html",
+    "https://www.washingtonpost.com/opinions/2020/02/27/trump-just-pushed-one-his-worst-conspiracy-theories-yet/%3foutputType=amp",
+    "https://www.foxnews.com/media/tom-steyer-coronavirus-trump-hurricane-katrina.amp",
+    "https://www.politico.com/amp/news/2020/02/26/trump-backers-coronavirus-conspiracy-117781",
+    "https://amp.usatoday.com/amp/4883728002",
+    "https://www.nbcnews.com/news/amp/ncna1143776"
+  ]
 }
