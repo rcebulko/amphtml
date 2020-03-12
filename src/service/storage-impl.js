@@ -146,7 +146,11 @@ export class Storage {
         // but doesn't need to be base64encode. Can convert to some other
         // encoding method for further improvement.
         const blob = btoa(JSON.stringify(store.obj));
-        return this.binding_.saveBlob(this.origin_, blob);
+        return this.binding_
+          .saveBlob(this.origin_, blob)
+          .catch(reason => {
+            dev().expectedError(TAG, 'Failed to save store: ', reason);
+          });
       })
       .then(this.broadcastReset_.bind(this));
   }
