@@ -119,11 +119,12 @@ export class Performance {
         this.win.PerformanceObserver.supportedEntryTypes) ||
       [];
 
-    // If Paint Timing API is not supported, cannot determine first contentful paint
+    // If Paint Timing API is not supported, cannot determine first contentful
+    // paint
     if (!supportedEntryTypes.includes('paint')) {
       this.metrics_.rejectSignal(
         TickLabel.FIRST_CONTENTFUL_PAINT,
-        new Error('First Contentful Paint not supported')
+        dev.createExpectedError('First Contentful Paint not supported')
       );
     }
 
@@ -138,7 +139,7 @@ export class Performance {
     if (!this.supportsLayoutShift_) {
       this.metrics_.rejectSignal(
         TickLabel.CUMULATIVE_LAYOUT_SHIFT,
-        new Error('Cumulative Layout Shift not supported')
+        dev.createExpectedError('Cumulative Layout Shift not supported')
       );
     }
 
@@ -153,7 +154,7 @@ export class Performance {
     if (!this.supportsEventTiming_) {
       this.metrics_.rejectSignal(
         TickLabel.FIRST_INPUT_DELAY,
-        new Error('First Input Delay not supported')
+        dev.createExpectedError('First Input Delay not supported')
       );
     }
 
@@ -169,7 +170,7 @@ export class Performance {
     if (!this.supportsLargestContentfulPaint_) {
       this.metrics_.rejectSignal(
         TickLabel.LARGEST_CONTENTFUL_PAINT_VISIBLE,
-        new Error('Largest Contentful Paint not supported')
+        dev.createExpectedError('Largest Contentful Paint not supported')
       );
     }
 
@@ -616,9 +617,8 @@ export class Performance {
       if (didStartInPrerender) {
         const userPerceivedVisualCompletenesssTime =
           docVisibleTime > -1
-            ? this.win.performance.now() - docVisibleTime
-            : //  Prerender was complete before visibility.
-              0;
+            ? this.win.performance.now() - docVisibleTime //  Prerender was complete before visibility.
+            : 0;
         this.ampdoc_.whenFirstVisible().then(() => {
           // We only tick this if the page eventually becomes visible,
           // since otherwise we heavily skew the metric towards the
@@ -849,7 +849,8 @@ export class Performance {
   }
 
   /**
-   * Retrieve a promise for tick label, resolved with metric. Used by amp-analytics
+   * Retrieve a promise for tick label, resolved with metric. Used by
+   * amp-analytics
    *
    * @param {TickLabel} label
    * @return {!Promise<time>}
