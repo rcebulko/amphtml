@@ -456,9 +456,11 @@ export class Messaging {
       delete this.waitingForResponse_[requestId];
       if (message.error) {
         this.logError_(TAG + ': handleResponse_ error: ', message.error);
-        pending.reject(
-          new Error(`Request ${message.name} failed: ${message.error}`)
+        const error = new Error(
+          `Request ${message.name} failed: ${message.error}`
         );
+        error.expected = true;
+        pending.reject(error);
       } else {
         pending.resolve(message.data);
       }
