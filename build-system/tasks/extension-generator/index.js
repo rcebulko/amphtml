@@ -211,7 +211,7 @@ AMP.extension('${name}', '0.1', AMP => {
 
 function getExamplesFile(name) {
   return `<!doctype html>
-<html ⚡>
+<html ⚡ lang="en">
 <head>
   <meta charset="utf-8">
   <title>${name} example</title>
