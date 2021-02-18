@@ -20,6 +20,7 @@ import {
   getService,
   getServiceForDoc,
   getServiceForDocOrNull,
+  getServiceInEmbedWin,
   getServicePromiseForDoc,
 } from './service';
 import {
@@ -621,12 +622,44 @@ export class Services {
   }
 
   /**
+   * @param {!Element|!../service/ampdoc-impl.AmpDoc} elementOrAmpDoc
+   * @return {!Promise<RealTimeConfigManager>}
+   */
+  static realTimeConfigForDoc(elementOrAmpDoc) {
+    return /** @type {!Promise<RealTimeConfigManager>} */ (getServicePromiseForDoc(
+      elementOrAmpDoc,
+      'real-time-config'
+    ));
+  }
+
+  /**
    * @param {!Element|!./service/ampdoc-impl.AmpDoc} elementOrAmpDoc
    * @return {!Promise<!./service/storage-impl.Storage>}
    */
   static storageForDoc(elementOrAmpDoc) {
     return /** @type {!Promise<!./service/storage-impl.Storage>} */ (getServicePromiseForDoc(
       elementOrAmpDoc,
+      'storage'
+    ));
+  }
+
+  /**
+   * @param {!Element|!./service/ampdoc-impl.AmpDoc} elementOrAmpDoc
+   * @return {!Promise<!./service/storage-impl.Storage>}
+   * TODO(dmanek): Add tests for this method.
+   */
+  static storageForTopLevelDoc(elementOrAmpDoc) {
+    const thisAmpdoc = Services.ampdoc(elementOrAmpDoc);
+    const ampdocService = Services.ampdocServiceFor(thisAmpdoc.win);
+    const topAmpdoc = ampdocService.isSingleDoc()
+      ? ampdocService.getSingleDoc()
+      : null;
+    // We need to verify that ampdocs are on the same origin, therefore
+    // we compare the windows of both.
+    const ampdoc =
+      topAmpdoc && topAmpdoc.win == thisAmpdoc.win ? topAmpdoc : thisAmpdoc;
+    return /** @type {!Promise<!./service/storage-impl.Storage>} */ (getServicePromiseForDoc(
+      ampdoc,
       'storage'
     ));
   }
@@ -648,7 +681,7 @@ export class Services {
    */
   static timerFor(window) {
     // TODO(alabiaga): This will always return the top window's Timer service.
-    return /** @type {!./service/timer-impl.Timer} */ (getService(
+    return /** @type {!./service/timer-impl.Timer} */ (getServiceInEmbedWin(
       window,
       'timer'
     ));
